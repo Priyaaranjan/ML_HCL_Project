@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mushroom Edibility Predictor</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+
+            <h1>🍄 Mushroom Edibility Predictor</h1>
+
+            <p>
+                Educational machine learning system for classifying
+                mushrooms as edible or poisonous.
+            </p>
+
+        </div>
+
+
+        <!-- SAFETY WARNING -->
+        <div class="warning-box">
+
+            <strong>⚠️ Important Safety Notice</strong>
+
+            <p>
+                This application is for educational and demonstration
+                purposes only. Do not use this prediction to determine
+                whether a real mushroom is safe to eat.
+            </p>
+
+        </div>
+
+
+        <!-- DATASET EXAMPLES -->
+        <div class="section">
+
+            <h2>🧪 Try Real Dataset Examples</h2>
+
+            <p style="margin-bottom: 18px; color: #6b7280;">
+                Load actual mushroom records from the UCI dataset
+                instead of entering the characteristics manually.
+            </p>
+
+
+            <div class="example-buttons">
+
+                <button
+                    type="button"
+                    id="randomButton"
+                    onclick="loadRandomExample()">
+
+                    🍄 Random Example
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="edibleButton"
+                    onclick="loadEdibleExample()">
+
+                    🟢 Load Edible Example
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="poisonousButton"
+                    onclick="loadPoisonousExample()">
+
+                    🔴 Load Poisonous Example
+
+                </button>
+
+            </div>
+
+
+            <!-- DATASET STATUS -->
+
+            <div
+                id="exampleStatus"
+                class="example-status"
+                style="display: none;">
+
+                <strong id="exampleStatusTitle"></strong>
+
+                <span id="exampleStatusText"></span>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form id="predictionForm">
+
+
+            <!-- CAP CHARACTERISTICS -->
+
+            <div class="section">
+
+                <h2>🍄 Cap Characteristics</h2>
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="cap_shape">
+                            Cap Shape
+                        </label>
+
+                        <select id="cap_shape" required>
+
+                            <option value="">Select</option>
+
+                            <option value="b">Bell</option>
+
+                            <option value="c">Conical</option>
+
+                            <option value="f">Flat</option>
+
+                            <option value="k">Knobbed</option>
+
+                            <option value="s">Sunken</option>
+
+                            <option value="x">Convex</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="cap_surface">
+                            Cap Surface
+                        </label>
+
+                        <select id="cap_surface" required>
+
+                            <option value="">Select</option>
+
+                            <option value="f">Fibrous</option>
+
+                            <option value="g">Grooves</option>
+
+                            <option value="s">Scaly</option>
+
+                            <option value="y">Smooth</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="cap_color">
+                            Cap Color
+                        </label>
+
+                        <select id="cap_color" required>
+
+                            <option value="">Select</option>
+
+                            <option value="b">Buff</option>
+
+                            <option value="c">Cinnamon</option>
+
+                            <option value="e">Red</option>
+
+                            <option value="g">Gray</option>
+
+                            <option value="n">Brown</option>
+
+                            <option value="p">Pink</option>
+
+                            <option value="r">Green</option>
+
+                            <option value="u">Purple</option>
+
+                            <option value="w">White</option>
+
+                            <option value="y">Yellow</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="bruises">
+                            Bruises
+                        </label>
+
+                        <select id="bruises" required>
+
+                            <option value="">Select</option>
+
+                            <option value="t">Yes</option>
+
+                            <option value="f">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="odor">
+                            Odor
+                        </label>
+
+                        <select id="odor" required>
+
+                            <option value="">Select</option>
+
+                            <option value="a">Almond</option>
+
+                            <option value="l">Anise</option>
+
+                            <option value="c">Creosote</option>
+
+                            <option value="y">Fishy</option>
+
+                            <option value="f">Foul</option>
+
+                            <option value="m">Musty</option>
+
+                            <option value="n">None</option>
+
+                            <option value="p">Pungent</option>
+
+                            <option value="s">Spicy</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- GILL CHARACTERISTICS -->
+
+            <div class="section">
+
+                <h2>🔬 Gill Characteristics</h2>
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="gill_attachment">
+                            Gill Attachment
+                        </label>
+
+                        <select id="gill_attachment" required>
+
+                            <option value="">Select</option>
+
+                            <option value="a">Attached</option>
+
+                            <option value="d">Descending</option>
+
+                            <option value="f">Free</option>
+
+                            <option value="n">Notched</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="gill_spacing">
+                            Gill Spacing
+                        </label>
+
+                        <select id="gill_spacing" required>
+
+                            <option value="">Select</option>
+
+                            <option value="c">Close</option>
+
+                            <option value="w">Crowded</option>
+
+                            <option value="d">Distant</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="gill_size">
+                            Gill Size
+                        </label>
+
+                        <select id="gill_size" required>
+
+                            <option value="">Select</option>
+
+                            <option value="b">Broad</option>
+
+                            <option value="n">Narrow</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="gill_color">
+                            Gill Color
+                        </label>
+
+                        <select id="gill_color" required>
+
+                            <option value="">Select</option>
+
+                            <option value="b">Buff</option>
+
+                            <option value="e">Red</option>
+
+                            <option value="g">Gray</option>
+
+                            <option value="h">Chocolate</option>
+
+                            <option value="k">Black</option>
+
+                            <option value="n">Brown</option>
+
+                            <option value="o">Orange</option>
+
+                            <option value="p">Pink</option>
+
+                            <option value="r">Green</option>
+
+                            <option value="u">Purple</option>
+
+                            <option value="w">White</option>
+
+                            <option value="y">Yellow</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- STALK CHARACTERISTICS -->
+
+            <div class="section">
+
+                <h2>🌿 Stalk Characteristics</h2>
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="stalk_shape">
+                            Stalk Shape
+                        </label>
+
+                        <select id="stalk_shape" required>
+
+                            <option value="">Select</option>
+
+                            <option value="e">Enlarging</option>
+
+                            <option value="t">Tapering</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="stalk_root">
+                            Stalk Root
+                        </label>
+
+                        <select id="stalk_root" required>
+
+                            <option value="">Select</option>
+
+                            <option value="b">Bulbous</option>
+
+                            <option value="c">Club</option>
+
+                            <option value="e">Equal</option>
+
+                            <option value="r">Rooted</option>
+
+                            <option value="?">
+                                Unknown / Missing
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="stalk_surface_above_ring">
+                            Stalk Surface Above Ring
+                        </label>
+
+                        <select
+                            id="stalk_surface_above_ring"
+                            required>
+
+                            <option value="">Select</option>
+
+                            <option value="f">Fibrous</option>
+
+                            <option value="k">Silky</option>
+
+                            <option value="s">Scaly</option>
+
+                            <option value="y">Smooth</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="stalk_surface_below_ring">
+                            Stalk Surface Below Ring
+                        </label>
+
+                        <select
+                            id="stalk_surface_below_ring"
+                            required>
+
+                            <option value="">Select</option>
+
+                            <option value="f">Fibrous</option>
+
+                            <option value="k">Silky</option>
+
+                            <option value="s">Scaly</option>
+
+                            <option value="y">Smooth</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="stalk_color_above_ring">
+                            Stalk Color Above Ring
+                        </label>
+
+                        <select
+                            id="stalk_color_above_ring"
+                            required>
+
+                            <option value="">Select</option>
+
+                            <option value="b">Buff</option>
+
+                            <option value="c">Cinnamon</option>
+
+                            <option value="e">Red</option>
+
+                            <option value="g">Gray</option>
+
+                            <option value="n">Brown</option>
+
+                            <option value="o">Orange</option>
+
+                            <option value="p">Pink</option>
+
+                            <option value="w">White</option>
+
+                            <option value="y">Yellow</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="stalk_color_below_ring">
+                            Stalk Color Below Ring
+                        </label>
+
+                        <select
+                            id="stalk_color_below_ring"
+                            required>
+
+                            <option value="">Select</option>
+
+                            <option value="b">Buff</option>
+
+                            <option value="c">Cinnamon</option>
+
+                            <option value="e">Red</option>
+
+                            <option value="g">Gray</option>
+
+                            <option value="n">Brown</option>
+
+                            <option value="o">Orange</option>
+
+                            <option value="p">Pink</option>
+
+                            <option value="w">White</option>
+
+                            <option value="y">Yellow</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- OTHER CHARACTERISTICS -->
+
+            <div class="section">
+
+                <h2>🔎 Other Characteristics</h2>
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="veil_type">
+                            Veil Type
+                        </label>
+
+                        <select id="veil_type" required>
+
+                            <option value="">Select</option>
+
+                            <option value="p">Partial</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="veil_color">
+                            Veil Color
+                        </label>
+
+                        <select id="veil_color" required>
+
+                            <option value="">Select</option>
+
+                            <option value="n">Brown</option>
+
+                            <option value="o">Orange</option>
+
+                            <option value="w">White</option>
+
+                            <option value="y">Yellow</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="ring_number">
+                            Ring Number
+                        </label>
+
+                        <select id="ring_number" required>
+
+                            <option value="">Select</option>
+
+                            <option value="n">None</option>
+
+                            <option value="o">One</option>
+
+                            <option value="t">Two</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="ring_type">
+                            Ring Type
+                        </label>
+
+                        <select id="ring_type" required>
+
+                            <option value="">Select</option>
+
+                            <option value="c">Cobwebby</option>
+
+                            <option value="e">Evanescent</option>
+
+                            <option value="f">Flaring</option>
+
+                            <option value="l">Large</option>
+
+                            <option value="n">None</option>
+
+                            <option value="p">Pendant</option>
+
+                            <option value="s">Sheathing</option>
+
+                            <option value="z">Zone</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SPORE & HABITAT -->
+
+            <div class="section">
+
+                <h2>🌳 Spore & Habitat</h2>
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="spore_print_color">
+                            Spore Print Color
+                        </label>
+
+                        <select id="spore_print_color" required>
+
+                            <option value="">Select</option>
+
+                            <option value="b">Buff</option>
+
+                            <option value="h">Chocolate</option>
+
+                            <option value="k">Black</option>
+
+                            <option value="n">Brown</option>
+
+                            <option value="o">Orange</option>
+
+                            <option value="r">Green</option>
+
+                            <option value="u">Purple</option>
+
+                            <option value="w">White</option>
+
+                            <option value="y">Yellow</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="population">
+                            Population
+                        </label>
+
+                        <select id="population" required>
+
+                            <option value="">Select</option>
+
+                            <option value="a">Abundant</option>
+
+                            <option value="c">Clustered</option>
+
+                            <option value="n">Numerous</option>
+
+                            <option value="s">Scattered</option>
+
+                            <option value="v">Several</option>
+
+                            <option value="y">Solitary</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="habitat">
+                            Habitat
+                        </label>
+
+                        <select id="habitat" required>
+
+                            <option value="">Select</option>
+
+                            <option value="d">Paths</option>
+
+                            <option value="g">Grasses</option>
+
+                            <option value="l">Leaves</option>
+
+                            <option value="m">Meadows</option>
+
+                            <option value="p">Paths</option>
+
+                            <option value="u">Urban</option>
+
+                            <option value="w">Waste</option>
+
+                            <option value="z">Woods</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PREDICT BUTTON -->
+
+            <div class="button-container">
+
+                <button
+                    type="submit"
+                    id="predictButton">
+
+                    🔍 Predict Mushroom
+
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <!-- RESULT -->
+
+        <div
+            id="resultBox"
+            class="result-box"
+            style="display: none;">
+
+            <h2 id="predictionText"></h2>
+
+            <h3 id="confidenceText"></h3>
+
+            <p id="messageText"></p>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+            id="errorBox"
+            class="error-box"
+            style="display: none;">
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+
+            <p>
+                Mushroom Edibility Prediction System
+            </p>
+
+            <p>
+                Random Forest + Chi-Square Feature Selection
+            </p>
+
+            <p>
+                Educational Use Only
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

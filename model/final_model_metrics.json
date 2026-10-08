@@ -1,0 +1,22 @@
+{
+    "model": "Random Forest",
+    "feature_selection": "Chi-Square SelectKBest",
+    "selected_features": 20,
+    "total_encoded_features": 115,
+    "train_samples": 6499,
+    "test_samples": 1625,
+    "accuracy": 1.0,
+    "precision_poisonous": 1.0,
+    "recall_poisonous": 1.0,
+    "f1_poisonous": 1.0,
+    "confusion_matrix": [
+        [
+            842,
+            0
+        ],
+        [
+            0,
+            783
+        ]
+    ]
+}
